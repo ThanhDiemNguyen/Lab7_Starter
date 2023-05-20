@@ -53,8 +53,26 @@ function initializeServiceWorker() {
   //            log that it was successful.
   // B5. TODO - In the event that the service worker registration fails, console
   //            log that it has failed.
-  // STEPS B6 ONWARDS WILL BE IN /sw.js
+  /*******************/
+
+  // B1
+  if('serviceWorker' in navigator) {
+    // B2
+    window.addEventListener("load", async() => {
+      // B3
+      try {
+        const registration = await navigator.serviceWorker.register('./sw.js'); 
+        // B4
+        console.log(`The service worker has been successfully registered with the scope: ${registration.scope}`);
+      } catch (error) {
+        // B5
+        console.log(`The service worker registration fails with ${error}`);
+      }
+    }); 
+  }
 }
+  // STEPS B6 ONWARDS WILL BE IN /sw.js
+  
 
 /**
  * Reads 'recipes' from localStorage and returns an array of
@@ -68,6 +86,9 @@ async function getRecipes() {
   // EXPOSE - START (All expose numbers start with A)
   // A1. TODO - Check local storage to see if there are any recipes.
   //            If there are recipes, return them.
+  const localRecipe = localStorage.getItem('recipes');
+  if(localRecipe) 
+    return JSON.parse(localRecipe);
   /**************************/
   // The rest of this method will be concerned with requesting the recipes
   // from the network
@@ -100,6 +121,34 @@ async function getRecipes() {
   //            resolve() method.
   // A10. TODO - Log any errors from catch using console.error
   // A11. TODO - Pass any errors to the Promise's reject() function
+   /**************************/
+  // A2
+  let recipe = [];
+  // A3
+  return new Promise (async (resolve, reject) => {
+    // A4
+    for (const url of RECIPE_URLS) {
+      // A5
+      try {
+        // A6
+        const response = await fetch(url);
+        // A7
+        const newRecipe = await response.json();
+        // A8
+        recipe.push(newRecipe);
+        // A9
+        if(recipe.length == RECIPE_URLS.length) {
+          saveRecipesToStorage(recipe);
+          resolve(recipe);
+        }
+      } catch (err) {
+          // A10
+          console.error(err);
+          // A11
+          reject(err);
+      }
+    }
+  });
 }
 
 /**
