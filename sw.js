@@ -44,7 +44,7 @@ self.addEventListener('fetch', function (event) {
   //            network response.
   // B7
   event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(CACHE_NAME).then((cache) => { 
       return cache.match(event.request).then((cachedResponse) => {
         // B8
         return cachedResponse || fetch(event.request).then((networkResponse) => {

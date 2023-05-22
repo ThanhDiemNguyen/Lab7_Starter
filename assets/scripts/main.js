@@ -62,7 +62,7 @@ function initializeServiceWorker() {
     window.addEventListener("load", async() => {
       // B3
       try { 
-        const registration = await navigator.serviceWorker.register('./sw.js', {scope: "/"}); 
+        const registration = await navigator.serviceWorker.register('./sw.js', {scope: "./"}); 
         // B4
         console.log(`The service worker has been successfully registered with the scope: ${registration.scope}`);
       } catch (error) {
@@ -137,7 +137,7 @@ async function getRecipes() {
         // A8
         recipe.push(newRecipe);
         // A9
-        if(recipe.length == RECIPE_URLS.length) {
+        if(recipe.length === RECIPE_URLS.length) {
           saveRecipesToStorage(recipe);
           resolve(recipe);
         }
