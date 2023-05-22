@@ -53,6 +53,7 @@ function initializeServiceWorker() {
   //            log that it was successful.
   // B5. TODO - In the event that the service worker registration fails, console
   //            log that it has failed.
+  // STEPS B6 ONWARDS WILL BE IN /sw.js
   /*******************/
 
   // B1
@@ -60,8 +61,8 @@ function initializeServiceWorker() {
     // B2
     window.addEventListener("load", async() => {
       // B3
-      try {
-        const registration = await navigator.serviceWorker.register('./sw.js'); 
+      try { 
+        const registration = await navigator.serviceWorker.register('./sw.js', {scope: "/",}); 
         // B4
         console.log(`The service worker has been successfully registered with the scope: ${registration.scope}`);
       } catch (error) {
@@ -70,9 +71,8 @@ function initializeServiceWorker() {
       }
     }); 
   }
-}
-  // STEPS B6 ONWARDS WILL BE IN /sw.js
   
+}
 
 /**
  * Reads 'recipes' from localStorage and returns an array of
